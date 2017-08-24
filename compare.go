@@ -23,6 +23,8 @@ var specialForms = map[string]int{
 	"pl":    1,
 }
 
+var unknownForm int = -7
+
 // Compares two version number strings, for a particular relationship
 //
 // Usage
@@ -155,5 +157,17 @@ func numVersion(value string) int {
 		return special
 	}
 
-	return -7
+	return unknownForm
+}
+
+func ValidSimpleVersionFormat(value string) {
+    // prepVersion to deal with ".0-beta"
+    normalized := version.Normalize(value)
+    for _, component := range strings.Split(normalized, ".") {
+        if numVersion(component) == unknownForm {
+            return false
+        }
+    }
+
+    return true
 }
